@@ -1,5 +1,6 @@
 from semanticka import *
 from dnfiknf import *
+from logickaekvivalencija import *
 from sympy.logic import simplify_logic
 
 izbor=int(input("1. Semantička tablica, DNF i KNF\n2. Logička jednakost sudova\n3. Minimizacija "))
