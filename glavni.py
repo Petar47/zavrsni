@@ -26,21 +26,12 @@ if(izbor==1):
     print("KNF: ")
     print(knff)
 elif(izbor==2):
-    a=1
     atomii=int(input("Koliko atoma ima sud?:"))
     sudd=input("Napisite sud koristeći ~,&,|,>>,<->,() i slova A,B,C... sve odvojeno osim zagrada:")
-    x2=[]
-    for i,kombinacija in kombinacije(atomi).items():
-        x.append(izrada(expr.parseString(sud)[0],kombinacija))
-    for i,kombinacija in kombinacije(atomii).items():
-        x2.append(izrada(expr.parseString(sudd)[0],kombinacija))
-    for i,j in zip(x,x2):
-        if(i[list(i)[-1]]!=j[list(j)[-1]]):
-            print("Sudovi nisu jednaki")
-            a=0
-            break
-    if(a==1):
-        print("Sudovi su jednaki")
+    if(logickaekvivalencija(sud,atomi,sudd,atomii)):
+        print("Sudovi su logicki ekvivalentni")
+    else:
+        print("Sudovi nisu logicki ekvivalentni")
 elif(izbor==3):
     print(simplify_logic(sud))
     
