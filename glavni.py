@@ -20,12 +20,8 @@ if(izbor==1):
             dnff += dnf(i, atomi) + '|'
         else:
             knff += knf(i, atomi) + '&'
-    dnff=dnff[:-1]
-    knff=knff[:-1]
-    print("DNF: ")
-    print(dnff)
-    print("KNF: ")
-    print(knff)
+    print("DNF: "+dnff[:-1])
+    print("KNF: "+knff[:-1])
 elif(izbor==2):
     atomii=int(input("Koliko atoma ima sud?:"))
     sudd=input("Napisite sud koristeći ~,&,|,>>,<->,() i slova A,B,C... sve odvojeno osim zagrada:")
