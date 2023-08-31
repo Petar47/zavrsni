@@ -3,6 +3,7 @@ from pyparsing import pyparsing_common as ppc
 from sympy import *
 import itertools
 
+#Definiranje operatora i operanata za izvedbu sintatičke analize logičkih izraza
 akcija = ppc.integer
 atom = Word(alphas, exact=1)
 operand = akcija | atom
@@ -13,6 +14,7 @@ ili = oneOf("|")
 imp = oneOf(">>")
 ekv = oneOf("<->")
 
+#Definiranje gramatike za obradu sintatičke analize logički izraza
 expr = infixNotation(
     operand,
     [
@@ -25,6 +27,14 @@ expr = infixNotation(
 )
 
 def kombinacije(atoms):
+    """
+    Generira sve moguće kombinacije istinitosnih vrijednosti za zadani broj atomskih izraza.
+    
+    :parametar atoms: Broj atomskih izraza za koje se generiraju kombinacije
+    :tip atoms: int
+    :return: Rječnik koji mapira indekse na kombinacije istinitosnih vrijednosti
+    :return tip: dict
+    """
     letters = [chr(ord('A') + i) for i in range(atoms)]
     
     brojKombinacija = 2 ** atoms
@@ -37,16 +47,39 @@ def kombinacije(atoms):
     return combinations_dict
 
 def provjeraJedan(sud):
+    """
+    Provjerava je li drugi element suda `sud` slovo (alfanumerički karakter).
+    :parametar sud: Varijabla koja se provjerava
+    :tip sud: list ili str
+    :return: True ako je drugi element slovo, inače False
+    :return tip: bool
+    """
     if(len(sud)>1 and sud[1].isalpha()):
         return True
     return False
 
 def provjeraDva(sud):
+    """
+    Provjerava je li drugi element suda `sud` slovo (alfanumerički karakter).
+    :parametar sud: Varijabla koja se provjerava
+    :tip sud: list ili str
+    :return: True ako je drugi element slovo, inače False
+    :return tip: bool
+    """
     if(len(sud)>2 and sud[2].isalpha()):
         return True
     return False
 
 def izrada(sud,kombinacija):
+    """
+    Rekurzivno prolazi strukturu liste/sintatičke analize `sud` 
+    i primjenjuje funkciju `izrada`.
+
+    :parametar sud: Sud u obliku sintatičke analize
+    :tip sud: list ili ParseResults
+    :parametar kombinacija: Kombinacije True/False atoma i sudova.
+    :tip kombinacija: dict
+    """
     if sud[0]==[]:
         del sud[0]
     if(isinstance(sud[0],ParseResults)):
@@ -59,6 +92,16 @@ def izrada(sud,kombinacija):
         izrada(sud[2],kombinacija)
         del sud[2]
     match sud[0]:
+        """
+        Prima listu `sud` i primjenjuje odgovarajuće logičke operacije na kombinacije 
+        iz `kombinacija`. Varijabla z predstavlja zadnji obrađeni sud, 
+        varijabla pz predstavlja predzadnji obrađeni sud.
+        
+        :parametar sud: Sud u obliku liste
+        :tip sud: list
+        :parametar kombinacija: Kombinacije True/False atoma i sudova.
+        :tip kombinacija: dict
+        """
         case '~':
             z = list(kombinacija)[-1]
             if(provjeraJedan(sud)):
@@ -109,6 +152,17 @@ def izrada(sud,kombinacija):
                 kombinacija[str(kombinacija[pz])+"<->"+str(kombinacija[z])]=x
     if(len(sud)>=2):
         match sud[1]:
+            """
+            Prima listu `sud` i primjenjuje odgovarajuće logičke operacije na kombinacije 
+            iz `kombinacija`. Varijabla z predstavlja zadnji obrađeni sud, 
+            varijabla pz predstavlja predzadnji obrađeni sud. 
+            Ovo ide u slučaju da se drugi element liste treba obraditi.
+            
+            :parametar sud: Sud u obliku liste
+            :tip sud: list
+            :parametar kombinacija: Kombinacije True/False atoma i sudova.
+            :tip kombinacija: dict
+            """
             case '|':
                 z = list(kombinacija)[-1]
                 if(provjeraDva(sud)):
