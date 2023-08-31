@@ -15,6 +15,13 @@ if(izbor==1):
     dnff=""
     knff=""
     for i in x:
+        """
+        Iterira kroz listu i provjerava disjunktivnu i konjuktivnu normalnu formu 
+        za svaki element.
+    
+        :parametar x: Lista za koje se generiraju DNF i KNF oblici
+        :tip x: list
+        """
         print(i)
         if(i[list(i)[-1]]):
             dnff += dnf(i, atomi) + '|'
