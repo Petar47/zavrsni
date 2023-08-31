@@ -5,6 +5,15 @@ def provjera(x):
         return 0
 
 def dnf(sud,atomi):
+    """
+    Generira Disjunktivnu Normalnu Formu (DNF) iz dane liste `sud` 
+    koji predstavlja logički izraz.
+
+    :parametar sud: Lista koja predstavlja logički izraz
+    :tip sud: dict
+    :return: DNF oblik logičkog izraza
+    :return tip: str
+    """
     rez="("
     for i in range(atomi):
         if(provjera(sud[list(sud)[i]])):
@@ -19,6 +28,15 @@ def dnf(sud,atomi):
     return rez
 
 def knf(sud,atomi):
+    """
+    Generira Konjunktivnu Normalnu Formu (KNF) iz dane liste `sud` 
+    koji predstavlja logički izraz.
+
+    :parametar sud: Lista koja predstavlja logički izraz
+    :tip sud: dict
+    :return: KNF oblik logičkog izraza
+    :return tip: str
+    """
     rez="("
     for i in range(atomi):
         if(provjera(sud[list(sud)[i]])):
