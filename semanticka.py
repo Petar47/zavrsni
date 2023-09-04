@@ -59,13 +59,6 @@ def provjeraJedan(sud):
     return False
 
 def provjeraDva(sud):
-    """
-    Provjerava je li drugi element suda `sud` slovo (alfanumerički karakter).
-    :parametar sud: Varijabla koja se provjerava
-    :tip sud: list ili str
-    :return: True ako je drugi element slovo, inače False
-    :return tip: bool
-    """
     if(len(sud)>2 and sud[2].isalpha()):
         return True
     return False
@@ -96,107 +89,116 @@ def izrada(sud,kombinacija):
         Prima listu `sud` i primjenjuje odgovarajuće logičke operacije na kombinacije 
         iz `kombinacija`. Varijabla z predstavlja zadnji obrađeni sud, 
         varijabla pz predstavlja predzadnji obrađeni sud.
-        
+
         :parametar sud: Sud u obliku liste
         :tip sud: list
         :parametar kombinacija: Kombinacije True/False atoma i sudova.
         :tip kombinacija: dict
         """
         case '~':
+            # Obrada negacije
             z = list(kombinacija)[-1]
             if(provjeraJedan(sud)):
                 x=Not(kombinacija[sud[1]])
-                kombinacija["~"+sud[1]] = x
+                kombinacija["\u00ac"+sud[1]] = x
             else:
                 x=Not(kombinacija[z])
-                kombinacija["~"+str(kombinacija[z])] = x
+                kombinacija["\u00ac("+z+")"] = x
             
         case '|':
+            # Obrada logičke disjunkcije
             z = list(kombinacija)[-1]
             if(provjeraJedan(sud)):
                 x=Or(kombinacija[z],kombinacija[sud[1]])
-                kombinacija[str(kombinacija[z])+"|"+sud[1]]=x
+                kombinacija["("+z+")\u2228"+sud[1]]=x
             else:
                 pz = list(kombinacija)[-2]
                 x=Or(kombinacija[pz],kombinacija[z])
-                kombinacija[str(kombinacija[pz])+"|"+str(kombinacija[z])]=x
+                kombinacija["("+pz+")\u2228("+z+")"]=x
             
         case '&':
+            # Obrada logičke konjunkcije
             z = list(kombinacija)[-1]
             if(provjeraJedan(sud)):
                 x=And(kombinacija[z],kombinacija[sud[1]])
-                kombinacija[str(kombinacija[z])+"&"+sud[1]]=x
+                kombinacija["("+z+")\u2227"+sud[1]]=x
             else:
                 pz = list(kombinacija)[-2]
                 x=And(kombinacija[pz],kombinacija[z])
-                kombinacija[str(kombinacija[pz])+"&"+str(kombinacija[z])]=x
+                kombinacija["("+pz+")\u2227("+z+")"]=x
 
         case '>>':
+            # Obrada implikacije
             z = list(kombinacija)[-1]
             if(provjeraJedan(sud)):
                 x=Implies(kombinacija[z],kombinacija[sud[1]])
-                kombinacija[str(kombinacija[z])+">>"+sud[1]]=x
+                kombinacija["("+z+")\u2192"+sud[1]]=x
             else:
                 pz = list(kombinacija)[-2]
                 x=Implies(kombinacija[pz],kombinacija[z])
-                kombinacija[str(kombinacija[pz])+">>"+str(kombinacija[z])]=x
+                kombinacija["("+pz+")\u2192("+z+")"]=x
 
         case '<->':
+            # Obrada ekvivalencije
             z = list(kombinacija)[-1]
             if(provjeraJedan(sud)):
                 x=Equivalent(kombinacija[z],kombinacija[sud[1]])
-                kombinacija[str(kombinacija[z])+"<->"+sud[1]]=x
+                kombinacija["("+z+")\u21d4"+sud[1]]=x
             else:
                 pz = list(kombinacija)[-2]
                 x=Equivalent(kombinacija[pz],kombinacija[z])
-                kombinacija[str(kombinacija[pz])+"<->"+str(kombinacija[z])]=x
+                kombinacija["("+pz+")\u21d4("+z+")"]=x
     if(len(sud)>=2):
+        """
+        Prima listu `sud` i primjenjuje odgovarajuće logičke operacije na kombinacije 
+        iz `kombinacija`. Varijabla z predstavlja zadnji obrađeni sud, 
+        varijabla pz predstavlja predzadnji obrađeni sud. 
+        Ovo ide u slučaju da se drugi element liste treba obraditi.
+
+        :parametar sud: Sud u obliku liste
+        :tip sud: list
+        :parametar kombinacija: Kombinacije True/False atoma i sudova.
+        :tip kombinacija: dict
+        """
         match sud[1]:
-            """
-            Prima listu `sud` i primjenjuje odgovarajuće logičke operacije na kombinacije 
-            iz `kombinacija`. Varijabla z predstavlja zadnji obrađeni sud, 
-            varijabla pz predstavlja predzadnji obrađeni sud. 
-            Ovo ide u slučaju da se drugi element liste treba obraditi.
-            
-            :parametar sud: Sud u obliku liste
-            :tip sud: list
-            :parametar kombinacija: Kombinacije True/False atoma i sudova.
-            :tip kombinacija: dict
-            """
             case '|':
+                # Obrada logičke disjunkcije
                 z = list(kombinacija)[-1]
                 if(provjeraDva(sud)):
                     x=Or(kombinacija[sud[0]],kombinacija[sud[2]])
-                    kombinacija[sud[0]+"|"+sud[2]]=x
+                    kombinacija[sud[0]+"\u2228"+sud[2]]=x
                 else:
                     x=Or(kombinacija[sud[0]],kombinacija[z])
-                    kombinacija[sud[0]+"|"+str(kombinacija[z])]=x
+                    kombinacija[sud[0]+"\u2228("+z+")"]=x
 
             case '&':
+                # Obrada logičke konjukcije
                 z = list(kombinacija)[-1]
                 if(provjeraDva(sud)):
                     x=And(kombinacija[sud[0]],kombinacija[sud[2]])
-                    kombinacija[sud[0]+"&"+sud[2]]=x
+                    kombinacija[sud[0]+"\u2227"+sud[2]]=x
                 else:
                     x=And(kombinacija[sud[0]],kombinacija[z])
-                    kombinacija[sud[0]+"&"+str(kombinacija[z])]=x
+                    kombinacija[sud[0]+"\u2227("+z+")"]=x
 
             case '>>':
+                # Obrada implikacije
                 z = list(kombinacija)[-1]
                 if(provjeraDva(sud)):
                     x=Implies(kombinacija[sud[0]],kombinacija[sud[2]])
-                    kombinacija[sud[0]+">>"+sud[2]]=x
+                    kombinacija[sud[0]+"\u2192"+sud[2]]=x
                 else:
                     x=Implies(kombinacija[sud[0]],kombinacija[z])
-                    kombinacija[sud[0]+">>"+str(kombinacija[z])]=x
+                    kombinacija[sud[0]+"\u2192("+z+")"]=x
 
             case '<->':
+                # Obrada ekvivalencije
                 z = list(kombinacija)[-1]
                 if(provjeraDva(sud)):
                     x=Equivalent(kombinacija[sud[0]],kombinacija[sud[2]])
-                    kombinacija[sud[0]+"<->"+sud[2]]=x
+                    kombinacija[sud[0]+"\u21d4"+sud[2]]=x
                 else:
                     x=Equivalent(kombinacija[sud[0]],kombinacija[z])
-                    kombinacija[sud[0]+"<->"+str(kombinacija[z])]=x
+                    kombinacija[sud[0]+"\u21d4("+z+")"]=x
     return kombinacija
     
