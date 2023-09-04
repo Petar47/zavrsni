@@ -19,7 +19,6 @@ def logickaekvivalencija(sud,atomi,sudd,atomii):
     :return: Vraća True ako su sudovi ekvivalentni; False ako nisu
     :return tip: bool
     """
-
     x=[]
     x2=[]
     for i,kombinacija in kombinacije(atomi).items():
