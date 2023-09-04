@@ -84,17 +84,18 @@ def izrada(sud,kombinacija):
     if(len(sud)>2 and isinstance(sud[2],ParseResults)):
         izrada(sud[2],kombinacija)
         del sud[2]
-    match sud[0]:
-        """
-        Prima listu `sud` i primjenjuje odgovarajuće logičke operacije na kombinacije 
-        iz `kombinacija`. Varijabla z predstavlja zadnji obrađeni sud, 
-        varijabla pz predstavlja predzadnji obrađeni sud.
+    """
+    Prima listu `sud` i primjenjuje odgovarajuće logičke operacije na kombinacije 
+    iz `kombinacija`. Varijabla z predstavlja zadnji obrađeni sud, 
+    varijabla pz predstavlja predzadnji obrađeni sud.
 
-        :parametar sud: Sud u obliku liste
-        :tip sud: list
-        :parametar kombinacija: Kombinacije True/False atoma i sudova.
-        :tip kombinacija: dict
-        """
+    :parametar sud: Sud u obliku liste
+    :tip sud: list
+    :parametar kombinacija: Kombinacije True/False atoma i sudova.
+    :tip kombinacija: dict
+    """
+    match sud[0]:
+
         case '~':
             # Obrada negacije
             z = list(kombinacija)[-1]
