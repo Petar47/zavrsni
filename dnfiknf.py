@@ -4,48 +4,59 @@ def provjera(x):
     else:
         return 0
 
-def dnf(sud,atomi):
-    """
-    Generira Disjunktivnu Normalnu Formu (DNF) iz dane liste `sud` 
-    koji predstavlja logički izraz.
-
-    :parametar sud: Lista koja predstavlja logički izraz
-    :tip sud: dict
-    :return: DNF oblik logičkog izraza
-    :return tip: str
-    """
+def dnfiknff(sud,atomi):
+    dnff=""
+    knff=""
     rez="("
-    for i in range(atomi):
-        if(provjera(sud[list(sud)[i]])):
-            rez+=str(list(sud)[i])
-            rez+='&'
-        else:
-            rez+='~'
-            rez+=str(list(sud)[i])
-            rez+='&'       
-    rez=rez.rstrip(rez[-1])
-    rez+=")"
-    return rez
+    rezz="("
+    for i in sud:
+        """
+        Iterira kroz listu i provjerava disjunktivnu i konjuktivnu normalnu formu 
+        za svaki element.
 
-def knf(sud,atomi):
-    """
-    Generira Konjunktivnu Normalnu Formu (KNF) iz dane liste `sud` 
-    koji predstavlja logički izraz.
+        :parametar x: Lista za koje se generiraju DNF i KNF oblici
+        :tip x: list
+        """
+        if(i[list(i)[-1]]):
+            """
+            Generira Disjunktivnu Normalnu Formu (DNF) iz dane liste `sud` 
+            koji predstavlja logički izraz.
 
-    :parametar sud: Lista koja predstavlja logički izraz
-    :tip sud: dict
-    :return: KNF oblik logičkog izraza
-    :return tip: str
-    """
-    rez="("
-    for i in range(atomi):
-        if(provjera(sud[list(sud)[i]])):
-            rez+=str(list(sud)[i])
-            rez+='|'
+            :parametar sud: Lista koja predstavlja logički izraz
+            :tip sud: dict
+            :return: DNF oblik logičkog izraza
+            :return tip: str
+            """
+            rez="("
+            for j in range(atomi):
+                if(provjera(i[list(i)[j]])):
+                    rez+=str(list(i)[j])
+                    rez+='\u2227'
+                else:
+                    rez+='\u00ac'
+                    rez+=str(list(i)[j])
+                    rez+='\u2227'       
+            rez=rez.rstrip(rez[-1])
+            dnff+=rez+")"
         else:
-            rez+='~'
-            rez+=str(list(sud)[i])
-            rez+='|'       
-    rez=rez.rstrip(rez[-1])
-    rez+=")"
-    return rez
+            """
+            Generira Konjunktivnu Normalnu Formu (KNF) iz dane liste `sud` 
+            koji predstavlja logički izraz.
+
+            :parametar sud: Lista koja predstavlja logički izraz
+            :tip sud: dict
+            :return: KNF oblik logičkog izraza
+            :return tip: str
+            """
+            rezz="("
+            for j in range(atomi):
+                if(provjera(i[list(i)[j]])):
+                    rezz+=str(list(i)[j])
+                    rezz+='\u2228'
+                else:
+                    rezz+='\u00ac'
+                    rezz+=str(list(i)[j])
+                    rezz+='\u2228'       
+            rezz=rezz.rstrip(rezz[-1])
+            knff+=rezz+")"
+    return dnff,knff
