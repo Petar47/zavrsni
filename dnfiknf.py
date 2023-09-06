@@ -37,7 +37,7 @@ def dnfiknff(sud,atomi):
                     rez+=str(list(i)[j])
                     rez+='\u2227'       
             rez=rez.rstrip(rez[-1])
-            dnff+=rez+")"
+            dnff+=rez+")\u2228"
         else:
             """
             Generira Konjunktivnu Normalnu Formu (KNF) iz dane liste `sud` 
@@ -58,5 +58,7 @@ def dnfiknff(sud,atomi):
                     rezz+=str(list(i)[j])
                     rezz+='\u2228'       
             rezz=rezz.rstrip(rezz[-1])
-            knff+=rezz+")"
-    return dnff,knff
+            knff+=rezz+")\u2227"
+    return dnff.rstrip(dnff[-1]),knff.rstrip(knff[-1])
+
+
