@@ -31,10 +31,10 @@ match opcija:
         print("DNF: "+dnf)
         print("KNF: "+knf)
     case 'logekv':
-        atomi=len(parse_expr(args.string).free_symbols)
-        sudd=input("Napisite sud koristeći ~,&,|,>>,<->,() i slova A,B,C... sve odvojeno osim zagrada:")
-        atomii=len(parse_expr(sudd).free_symbols)
-        if(logickaekvivalencija(args.string,atomi,sudd,atomii)):
+        sud=args.string.split("==")
+        atomi=len(parse_expr(sud[0]).free_symbols)
+        atomii=len(parse_expr(sud[1]).free_symbols)
+        if(logickaekvivalencija(sud[0],atomi,sud[1],atomii)):
             print("Sudovi su logicki ekvivalentni")
         else:
             print("Sudovi nisu logicki ekvivalentni")
