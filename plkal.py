@@ -15,36 +15,14 @@ args = parser.parse_args()
 opcija = args.opcija
 match opcija:
     case 's':
-        """
-        U ovom slučaju program čita string koji korisnik unosi i obrađuje 
-        funkciju izrada za taj sud.
-        
-        :parametar sud: sud kojeg obrađujemo
-        :tip sud: string
-        :parametar atomi: broj atoma u sudu
-        :tip atomi: int
-        Rezultat:
-        Tablica u formatu mreže koja prikazuje kombinacije ulaznog niza.
-        """
         x=[]
         atomi=len(parse_expr(args.string).free_symbols)
         for i,kombinacija in kombinacije(atomi).items():
-            x.append(izrada(args.string,kombinacija))
+            x.append(izrada(expr.parseString(args.string)[0],kombinacija))
         kljucevi = list(x[0].keys())
         tablica = [list(y.values()) for y in x]
         print(tabulate(tablica, headers=kljucevi, tablefmt='grid'))  
     case 'dnfiknf':
-        """
-        U ovom slučaju program čita string koji korisnik unosi i obrađuje 
-        funkciju dnfiknf za taj sud.
-        
-        :parametar sud: sud kojeg obrađujemo
-        :tip sud: string
-        :parametar atomi: broj atoma u sudu
-        :tip atomi: int
-        Rezultat:
-        DNF i KNF suda
-        """
         x=[]
         atomi=len(parse_expr(args.string).free_symbols)
         for i,kombinacija in kombinacije(atomi).items():
@@ -53,18 +31,6 @@ match opcija:
         print("DNF: "+dnf)
         print("KNF: "+knf)
     case 'logekv':
-        """
-        U ovom slučaju program čita string koji korisnik unosi, odvaja sudove, zatim obrađuje funkciju logickaekvivalencija za taj sud.
-        
-        :parametar sud: dva suda koja uspoređujemo
-        :tip sud: niz
-        :parametar atomi: broj atoma u prvom sudu
-        :tip atomi: int
-        :parametar atomii: broj atoma u drugom sudu
-        :tip atomii: int
-        Rezultat:
-        Logička ekvivalencija suda
-        """
         sud=args.string.split("==")
         atomi=len(parse_expr(sud[0]).free_symbols)
         atomii=len(parse_expr(sud[1]).free_symbols)
@@ -73,13 +39,4 @@ match opcija:
         else:
             print("Sudovi nisu logicki ekvivalentni")
     case 'min':
-        """
-        U ovom slučaju program čita string koji korisnik unosi i pomoću sympy 
-        radi minimzaciju za taj sud.
-        
-        :parametar sud: sud
-        :tip sud: string
-        Rezultat:
-        Minimizacija suda
-        """
         print(simplify_logic(args.string))
