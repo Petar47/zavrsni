@@ -54,8 +54,7 @@ match opcija:
         print("KNF: "+knf)
     case 'logekv':
         """
-        U ovom slučaju program čita string koji korisnik unosi i obrađuje 
-        funkciju logickaekvivalencija za taj sud.
+        U ovom slučaju program čita string koji korisnik unosi, odvaja sudove, zatim obrađuje funkciju logickaekvivalencija za taj sud.
         
         :parametar sud: dva suda koja uspoređujemo
         :tip sud: niz
