@@ -26,6 +26,8 @@ def main(izraz, sem, dnfiknf, logekv, mini, sve):
     if sve:
         tablica(izraz)
         dnfiiknf(izraz)
+        if izraz.find("<->") != -1:
+           ekvivalencija(izraz)
         minimizacija(izraz)
         
 def provjeraAtoma(izraz):
