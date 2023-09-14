@@ -63,7 +63,12 @@ def ekvivalencija(logekv):
         print("Sudovi nisu logicki ekvivalentni")
     pass
 def minimizacija(mini):
-    print(simplify_logic(mini))
+    if mini.find("<->") != -1:
+        mini=mini.split("<->")
+        print(simplify_logic(mini[0]))
+        print(simplify_logic(mini[1]))
+    else:
+        print(simplify_logic(mini))
     pass
 if __name__ == '__main__':
     main()
