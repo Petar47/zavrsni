@@ -3,7 +3,7 @@ from pyparsing import pyparsing_common as ppc
 from sympy import *
 import itertools
 
-#Definiranje operatora i operanata za izvedbu sintatičke analize logičkih izraza
+#Definiranje operatora i operanada za izvedbu sintatičke analize logičkih izraza
 akcija = ppc.integer
 atom = Word(alphas, exact=1)
 operand = akcija | atom
@@ -63,10 +63,10 @@ def provjeraDva(sud):
         return True
     return False
 
-def izrada(sud,kombinacija):
+def semanticka(sud,kombinacija):
     """
     Rekurzivno prolazi strukturu liste/sintatičke analize `sud` 
-    i primjenjuje funkciju `izrada`.
+    i primjenjuje funkciju `semanticka`.
 
     :parametar sud: Sud u obliku sintatičke analize
     :tip sud: list ili ParseResults
@@ -76,13 +76,13 @@ def izrada(sud,kombinacija):
     if sud[0]==[]:
         del sud[0]
     if(isinstance(sud[0],ParseResults)):
-        izrada(sud[0],kombinacija)
+        semanticka(sud[0],kombinacija)
         del sud[0]
     if(len(sud)>1 and isinstance(sud[1],ParseResults)):
-        izrada(sud[1],kombinacija)
+        semanticka(sud[1],kombinacija)
         del sud[1]
     if(len(sud)>2 and isinstance(sud[2],ParseResults)):
-        izrada(sud[2],kombinacija)
+        semanticka(sud[2],kombinacija)
         del sud[2]
     """
     Prima listu `sud` i primjenjuje odgovarajuće logičke operacije na kombinacije 
@@ -202,4 +202,3 @@ def izrada(sud,kombinacija):
                     x=Equivalent(kombinacija[sud[0]],kombinacija[z])
                     kombinacija[sud[0]+"\u21d4("+z+")"]=x
     return kombinacija
-    
