@@ -1,5 +1,5 @@
-from semanticka import *
-def logickaekvivalencija(sud,atomi,sudd,atomii):
+from semanticka_tablica import *
+def logicka_ekvivalencija(sud,atomi,sudd,atomii):
     """
     Utvrđuje jesu li dvije logičke izjave ekvivalentne za zadane kombinacije atoma.
 
@@ -22,9 +22,9 @@ def logickaekvivalencija(sud,atomi,sudd,atomii):
     x=[]
     x2=[]
     for i,kombinacija in kombinacije(atomi).items():
-        x.append(izrada(expr.parseString(sud)[0],kombinacija))
+        x.append(semanticka(expr.parseString(sud)[0],kombinacija))
     for i,kombinacija in kombinacije(atomii).items():
-        x2.append(izrada(expr.parseString(sudd)[0],kombinacija))
+        x2.append(semanticka(expr.parseString(sudd)[0],kombinacija))
     for i,j in zip(x,x2):
         if(i[list(i)[-1]]!=j[list(j)[-1]]):
             return False
