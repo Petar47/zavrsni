@@ -21,6 +21,8 @@ pyparsing: Za parsiranje logičkih izraza.
 
 itertools: Za generisanje kombinacija vrednosti atoma.
 
+click: Za pokrećanje plkal.py
+
 Instalirajte ove biblioteke koristeći pip: pip install pytest sympy tabulate pyparsing
 
 Korak 3: Pokrenite kalkulator
