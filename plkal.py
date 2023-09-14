@@ -1,54 +1,63 @@
-from semanticka import *
+from semanticka_tablica import *
 from dnfiknf import *
 from logickaekvivalencija import *
-from sympy import symbols, parse_expr
+from sympy import symbols, parse_expr, Eq
 from sympy.logic import simplify_logic
 from tabulate import tabulate
 import click
 
 @click.command()
-@click.option('--s', help='Semantička tablica')
-@click.option('--dnfiknf', help='DNF i KNF')
-@click.option('--logekv', help='Logička ekvivalencija')
-@click.option('--mini', help='Minimizacija')
-@click.option('--sve', help='Sve')
+@click.argument('izraz', required=True)
+@click.option('-s', '--sem', is_flag=True, help='Semantička tablica')
+@click.option('-d', '--dnfiknf', is_flag=True, help='DNF i KNF')
+@click.option('-l', '--logekv', is_flag=True, help='Logička ekvivalencija')
+@click.option('-m', '--mini', is_flag=True, help='Minimizacija')
+@click.option('--sve', is_flag=True, help='Sve')
 
-def main(s, dnfiknf, logekv, mini, sve):
-    if s:
-        sem(s)
+def main(izraz, sem, dnfiknf, logekv, mini, sve):
+    if sem:
+        tablica(izraz)
     if dnfiknf:
-        dnfiiknf(dnfiknf)
+        dnfiiknf(izraz)
     if logekv:
-        ekvivalencija(logekv)
+        ekvivalencija(izraz)
     if mini:
-        minimizacija(mini)
+        minimizacija(izraz)
     if sve:
-        sem(sve)
-        dnfiiknf(sve)
-        minimizacija(sve)
-def sem(s):
+        tablica(izraz)
+        dnfiiknf(izraz)
+        minimizacija(izraz)
+        
+def provjeraAtoma(izraz):
+    atomi=set()
+    for slovo in izraz:
+        if slovo.isalpha():
+            atomi.add(slovo)
+    return len(atomi)
+
+def tablica(s):
     x=[]
-    atomi=len(parse_expr(s).free_symbols)
+    atomi=provjeraAtoma(s)
     for i,kombinacija in kombinacije(atomi).items():
-        x.append(izrada(expr.parseString(s)[0],kombinacija))
+        x.append(semanticka(expr.parseString(s)[0],kombinacija))
     kljucevi = list(x[0].keys())
     tablica = [list(y.values()) for y in x]
     print(tabulate(tablica, headers=kljucevi, tablefmt='grid'))
     pass
 def dnfiiknf(dnfiknf):
     x=[]
-    atomi=len(parse_expr(dnfiknf).free_symbols)
+    atomi=provjeraAtoma(dnfiknf)
     for i,kombinacija in kombinacije(atomi).items():
-        x.append(izrada(dnfiknf,kombinacija))
+        x.append(semanticka(dnfiknf,kombinacija))
     dnf,knf=dnfiknff(x,atomi)
     print("DNF: "+dnf)
     print("KNF: "+knf)
     pass
 def ekvivalencija(logekv):
-    sud=logekv.split("==")
-    atomi=len(parse_expr(sud[0]).free_symbols)
-    atomii=len(parse_expr(sud[1]).free_symbols)
-    if(logickaekvivalencija(sud[0],atomi,sud[1],atomii)):
+    sud=logekv.split("<->")
+    atomi=provjeraAtoma(sud[0])
+    atomii=provjeraAtoma(sud[1])
+    if(logicka_ekvivalencija(sud[0],atomi,sud[1],atomii)):
         print("Sudovi su logicki ekvivalentni")
     else:
         print("Sudovi nisu logicki ekvivalentni")
