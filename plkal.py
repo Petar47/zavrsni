@@ -8,26 +8,37 @@ import click
 
 @click.command()
 @click.argument('izraz', required=True)
-@click.option('-s', '--sem', is_flag=True, help='Semantička tablica')
-@click.option('-d', '--dnfiknf', is_flag=True, help='DNF i KNF')
+@click.option('-s', '--sem-tablica', is_flag=True, help='Semantička tablica')
+@click.option('-d', '--dnf', is_flag=True, help='DNF')
+@click.option('-k', '--knf', is_flag=True, help='KNF')
+@click.option('--el-kon', is_flag=True, help='Elementarna konjukcija')
+@click.option('--el-dis', is_flag=True, help='Elementarna disjunkcija')
+@click.option('-t','--taut', is_flag=True, help='Tautologija')
 @click.option('-l', '--logekv', is_flag=True, help='Logička ekvivalencija')
 @click.option('-m', '--mini', is_flag=True, help='Minimizacija')
 @click.option('--sve', is_flag=True, help='Sve')
-
-def main(izraz, sem, dnfiknf, logekv, mini, sve):
-    if sem:
+def main(izraz, sem_tablica, dnf, knf, el_kon, el_dis, taut, logekv, mini, sve):
+    if sem_tablica:
         tablica(izraz)
-    if dnfiknf:
-        dnfiiknf(izraz)
-    if logekv:
-        ekvivalencija(izraz)
+    if dnf:
+        dnff(izraz)
+    if knf:
+        knff(izraz)
+    if el_kon:
+        elkon(izraz)
+    if el_dis:
+        eldis(izraz)
+    if taut:
+        tau(izraz)
     if mini:
         minimizacija(izraz)
     if sve:
         tablica(izraz)
-        dnfiiknf(izraz)
-        if izraz.find("<->") != -1:
-           ekvivalencija(izraz)
+        dnff(izraz)
+        knff(izraz)
+        elkon(izraz)
+        eldis(izraz)
+        tau(izraz)
         minimizacija(izraz)
         
 def provjeraAtoma(izraz):
@@ -46,24 +57,52 @@ def tablica(s):
     tablica = [list(y.values()) for y in x]
     print(tabulate(tablica, headers=kljucevi, tablefmt='grid'))
     pass
-def dnfiiknf(dnfiknf):
+def dnff(dnfiknf):
     x=[]
     atomi=provjeraAtoma(dnfiknf)
     for i,kombinacija in kombinacije(atomi).items():
         x.append(semanticka(dnfiknf,kombinacija))
     dnf,knf=dnfiknff(x,atomi)
     print("DNF: "+dnf)
+    pass
+def knff(dnfiknf):
+    x=[]
+    atomi=provjeraAtoma(dnfiknf)
+    for i,kombinacija in kombinacije(atomi).items():
+        x.append(semanticka(dnfiknf,kombinacija))
+    dnf,knf=dnfiknff(x,atomi)
     print("KNF: "+knf)
     pass
-def ekvivalencija(logekv):
-    sud=logekv.split("<->")
-    atomi=provjeraAtoma(sud[0])
-    atomii=provjeraAtoma(sud[1])
-    if(logicka_ekvivalencija(sud[0],atomi,sud[1],atomii)):
-        print("Sudovi su logicki ekvivalentni")
-    else:
-        print("Sudovi nisu logicki ekvivalentni")
-    pass
+def elkon(el):
+    x=[]
+    atomi=provjeraAtoma(el)
+    for i,kombinacija in kombinacije(atomi).items():
+        x.append(semanticka(el,kombinacija))
+    dnf,knf=dnfiknff(x,atomi)
+    kon=dnf.split("\u2228")
+    print("Elementarna konjukcija:")
+    for i in kon:
+        print(i[1:-1])
+def eldis(el):
+    x=[]
+    atomi=provjeraAtoma(el)
+    for i,kombinacija in kombinacije(atomi).items():
+        x.append(semanticka(el,kombinacija))
+    dnf,knf=dnfiknff(x,atomi)
+    kon=knf.split("\u2227")
+    print("Elementarna disjunkcija:")
+    for i in kon:
+        print(i[1:-1])
+def tau(s):
+    x=[]
+    atomi=provjeraAtoma(s)
+    for i,kombinacija in kombinacije(atomi).items():
+        x.append(semanticka(expr.parseString(s)[0],kombinacija))
+    for i in x:
+        if(i[list(i)[-1]]==False):
+            print("Sud nije tautologija")
+            return
+    print("Sud je tautologija")
 def minimizacija(mini):
     if mini.find("<->") != -1:
         mini=mini.split("<->")
